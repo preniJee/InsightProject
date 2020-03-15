@@ -15,7 +15,7 @@ class Marketmap():
         Attributes
         -----------------
         contract_type : a dict of the score a customers get based on its contract's type
-
+        Contractduration
 
 
         """
