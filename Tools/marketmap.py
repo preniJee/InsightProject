@@ -3,6 +3,8 @@ import plotly.express as px
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.cm as cm
+
+
 class Marketmap():
     """
     This class is for creating a market map based on the customers of a company
@@ -59,9 +61,9 @@ class Marketmap():
         print('score range for medium customer: ', hard, '-', medium)
         print('score range for easy customer: ', medium, '-', maximum)
         print('----------------------------')
-        self.hard=(minimum,hard)
-        self.medium=(hard,medium)
-        self.easy=medium,maximum
+        self.hard = (minimum, hard)
+        self.medium = (hard, medium)
+        self.easy = medium, maximum
 
     def _set_score(self, line):
 
@@ -89,86 +91,96 @@ class Marketmap():
                         duration_score = self.contract_duration[k]
         # extract the status of the contract/check and its score for the given customer
 
-        status_score=self.customer_status[line[4]]
-        total_score=type_score+amount_score+duration_score+status_score
-        self.customer_score[line[0]]=total_score
+        status_score = self.customer_status[line[4]]
+        total_score = type_score + amount_score + duration_score + status_score
+        self.customer_score[line[0]] = total_score
         # print('The score for ',line[0],'is ',total_score)
 
     def set_data(self, file_path):
         data = pd.read_excel(file_path)
         df = pd.DataFrame(data)
         # print(data)
-        self.customer_amounts={}
+        self.customer_amounts = {}
         for i in range(len(df)):
-            self.customer_amounts[df.iloc[i, 0]]=df.iloc[i, 2]
-            row = [df.iloc[i, 0], df.iloc[i, 1], df.iloc[i, 2], df.iloc[i, 3],df.iloc[i,4]]
+            self.customer_amounts[df.iloc[i, 0]] = df.iloc[i, 2]
+            row = [df.iloc[i, 0], df.iloc[i, 1], df.iloc[i, 2], df.iloc[i, 3], df.iloc[i, 4]]
             self._set_score(row)
 
     def categorize_customers(self):
-        self.categories={}
-        hards=[]
-        mediums=[]
-        easies=[]
-        for k,v in self.customer_score.items():
-            if self.hard[0]<= v <= self.hard[1]:
+        self.categories = {}
+        hards = []
+        mediums = []
+        easies = []
+        for k, v in self.customer_score.items():
+            if self.hard[0] <= v <= self.hard[1]:
                 hards.append(k)
-            elif self.medium[0]<= v <=self.medium[1]:
+            elif self.medium[0] <= v <= self.medium[1]:
                 mediums.append(k)
             elif self.easy[0] <= v <= self.easy[1]:
                 easies.append(k)
-        self.categories['hard']=hards
-        self.categories['medium']=mediums
-        self.categories['easy']=easies
+        self.categories['hard'] = hards
+        self.categories['medium'] = mediums
+        self.categories['easy'] = easies
         print('customer scores and their categories')
         print(self.customer_score)
         print(self.categories)
         print('----------------------------------------')
 
     def seperate_market_segments(self):
-        self.segment_company={}
-        self.segment_company['bank']=['بانک ملت','بانک مرکزی','بانک پاسارگاد']
-        self.segment_company['misc']=['صدا و سیما جمهوری اسلامی ایران' ,'مجموعه سراج','شرکت کنترل ترافیک',
-                                      'شرکت کاشف','شرکت مخابرات ایران',
-                                      'پلیس فتا','ناجا','موسسه پژوهشگران برتر فضای مجازی',
-                                      'ارشاد قم','کنترل کیفیت هوا','حوزه هنری دیجیتال','مجله راه و ساختمان صما',
-                                       'مجموعه دانش پایش نمایش','گروه خودرو سازی سایپا']
-        self.segment_company['news agency']=['خبرگزاری ایرنا','شبکه خبری حمل و نقل کشور','آخرین خبر','خبرگزاری موج']
-        self.segment_company['petro chemical']=['شرکت پلیمر آریاساسول']
-        self.segment_company['municipality']=['شهرداری لواسان']
+        self.segment_company = {}
+        self.segment_company['bank'] = ['بانک ملت', 'بانک مرکزی', 'بانک پاسارگاد']
+        self.segment_company['misc'] = ['صدا و سیما جمهوری اسلامی ایران', 'مجموعه سراج', 'شرکت کنترل ترافیک',
+                                        'شرکت کاشف', 'شرکت مخابرات ایران',
+                                        'پلیس فتا', 'ناجا', 'موسسه پژوهشگران برتر فضای مجازی',
+                                        'ارشاد قم', 'کنترل کیفیت هوا', 'حوزه هنری دیجیتال', 'مجله راه و ساختمان صما',
+                                        'مجموعه دانش پایش نمایش', 'گروه خودرو سازی سایپا']
+        self.segment_company['news agency'] = ['خبرگزاری ایرنا', 'شبکه خبری حمل و نقل کشور', 'آخرین خبر',
+                                               'خبرگزاری موج']
+        self.segment_company['petro chemical'] = ['شرکت پلیمر آریاساسول']
+        self.segment_company['municipality'] = ['شهرداری لواسان']
         # self.segment_company['holding']=['هلدینگ گردشگری ایران فان']
-        self.segment_company['accelerator']=['پارک علم و فناوری پردیس']
-        self.segment_company['insurance']=['سازمان بیمه سلامت ایران']
-        self.segment_company['broker']=['کارگزاری آگاه']
-        self.segment_company['ministry']=['وزارت اقتصاد']
-        self.segment_company['startup']=['تپسی','فروشگاه 5040','راهکارهای همراه کارینا','ایکاپ']
-        self.segment_company['foundation']=['بنیاد شهید و امور ایثارگران']
-        self.segment_company['isp']=['آسیاتک']
+        self.segment_company['accelerator'] = ['پارک علم و فناوری پردیس']
+        self.segment_company['insurance'] = ['سازمان بیمه سلامت ایران']
+        self.segment_company['broker'] = ['کارگزاری آگاه']
+        self.segment_company['ministry'] = ['وزارت اقتصاد']
+        self.segment_company['startup'] = ['تپسی', 'فروشگاه 5040', 'راهکارهای همراه کارینا', 'ایکاپ']
+        self.segment_company['foundation'] = ['بنیاد شهید و امور ایثارگران']
+        self.segment_company['isp'] = ['آسیاتک']
+
+    def get_score_per_segment(self):
+        segment_score = {}
+        for segment_company in self.segment_company.items():
+            seg_Sc = [score[1] for score in self.customer_score.items() if score[0] in segment_company[1]]
+            avg_score = round(sum(seg_Sc) / len(seg_Sc))
+            segment_score[segment_company[0]] = avg_score
+            # print(segment_company)
+            # print(seg_Sc)
+            # print(avg_score)
+        print('----------------------')
+        print('Accessability Score per segment')
+        print(segment_score)
 
     def create_map(self):
-        fig,ax=plt.subplots()
+        fig, ax = plt.subplots()
         ax.margins(0.05)
 
         print(len(self.customer_score))
-        n_colors=len(self.segment_company.items())
-        colors = cm.rainbow(np.linspace(0,1,len(self.segment_company.items())))
-        c=plt.get_cmap('Set2')
-        for i,kv in enumerate(self.segment_company.items()):
-            x=[]
-            y=[]
+        n_colors = len(self.segment_company.items())
+        colors = cm.rainbow(np.linspace(0, 1, len(self.segment_company.items())))
+        c = plt.get_cmap('Set2')
+        for i, kv in enumerate(self.segment_company.items()):
+            x = []
+            y = []
             for name in kv[1]:
                 x.append(self.customer_score[name])
                 y.append(self.customer_amounts[name])
-            ax.plot(x,y,marker='o',linestyle='',ms=12,label=kv[0],
-                    alpha=0.9,c=colors[i])
+            ax.plot(x, y, marker='o', linestyle='', ms=12, label=kv[0],
+                    alpha=0.9, c=colors[i])
 
         ax.legend()
         ax.set_aspect('equal')
         ax.grid(True, which='both')
         plt.show()
-
-
-
-
 
 
 # def plt_scatter(x,y,category):
@@ -179,18 +191,16 @@ Mm.get_ranges()
 Mm.set_data('../customers.xlsx')
 Mm.categorize_customers()
 print('values for x axis (customer scores)')
-print(Mm.customer_score.values())
-print('values for y axis (customer contract amounts monthly')
-print(Mm.customer_amounts.values())
-print('customers')
-print(Mm.customer_amounts.keys())
+print(Mm.customer_score)
+# print('values for y axis (customer contract amounts monthly')
+# print(Mm.customer_amounts.values())
+# print('customers')
+# print(Mm.customer_amounts.keys())
 # print(len(Mm.customer_amounts))
 Mm.seperate_market_segments()
-Mm.create_map()
-
+# Mm.create_map()
+Mm.get_score_per_segment()
 
 # colors=np.random.rand(len(Mm.customer_amounts))
 # plt.scatter(x=Mm.customer_score.values(),y=Mm.customer_amounts.values(),c=colors,alpha=0.5)
 # plt.show()
-
-
